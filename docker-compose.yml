@@ -1,0 +1,15 @@
+version: '3'
+services:
+        hyperf_env:
+                image: natici/hyperf_env:v2
+                container_name: hyperf_env_v2
+                working_dir: /export/www
+                privileged: true
+                ports:
+                        - ${HYPERF_PORT-9501}:${HYPERF_PORT-9501}
+                volumes:
+                        - ../:/export/www
+                command: /bin/bash
+                environment:
+                        - TZ=UTC
+                tty: true
