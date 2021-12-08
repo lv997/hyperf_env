@@ -8,7 +8,7 @@ services:
                 ports:
                         - ${HYPERF_PORT-9501}:${HYPERF_PORT-9501}
                 volumes:
-                        - ../:/export/www
+                        - /export:/export
                 command: /bin/bash
                 environment:
                         - TZ=UTC
