@@ -1,15 +1,27 @@
 version: '3'
+
+networks:
+        es:
+                driver: bridge
+
 services:
         hyperf_env:
-                image: natici/hyperf_env:v2
-                container_name: hyperf_env_v2
+                image: natici/hyperf:v3
+                container_name: hyperf_env_v3
                 working_dir: /export/www
                 privileged: true
                 ports:
                         - ${HYPERF_PORT-9501}:${HYPERF_PORT-9501}
+                        - ${HYPERF_PORT-9601}:${HYPERF_PORT-9601}
                 volumes:
                         - /export:/export
-                command: /bin/bash
                 environment:
                         - TZ=UTC
+                        - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/webserver/php/bin:/usr/local/webserver/php/sbin:/usr/local/webserver/openresty/nginx/sbin/
                 tty: true
+                command:
+                        - sh
+                        - -c
+                        - |
+                                /usr/local/webserver/php/bin/php /export/www/dtc/mro_support_app/bin/hyperf.php start &
+                                /usr/local/webserver/php/bin/php /export/www/dtc/csxtest/bin/hyperf.php start

@@ -5,14 +5,14 @@ WORKDIR /tmp
 COPY swoole-src-4.8.3.tar.gz ./
 COPY php-8.0.12.tar.gz ./
 COPY phpredis-release-5.3.4.zip ./
-COPY master.zip ./
+COPY oniguruma_v6.9.7.1.zip ./
 COPY openresty-1.19.9.1.tar.gz ./
 
 RUN yum update -y && yum clean all \
     #安装lnmp依赖 \
     && yum install -y --allowerasing wget make cmake unzip tar gcc gcc-c++ libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel readline readline-devel libxslt libxslt-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel ncurses curl gdbm-devel libXpm-devel libX11-devel gd-devel gmp-devel expat-devel xmlrpc-c libicu-devel sqlite-devel autoconf automake libtool libzip libzip-devel \
-    && unzip master.zip \
-    && cd oniguruma-master && ./autogen.sh && ./configure --prefix=/usr --libdir=/lib64/ && make && make install \
+    && unzip oniguruma_v6.9.7.1.zip \
+    && cd oniguruma-6.9.7.1 && ./autogen.sh && ./configure --prefix=/usr --libdir=/lib64/ && make && make install \
 \
     #安装php
     && cd /tmp \
@@ -29,6 +29,7 @@ RUN yum update -y && yum clean all \
     && echo "date\.timezone = UTC" >> php.ini \
     && echo "extension=swoole.so" >> php.ini \
     && echo "extension=redis.so" >> php.ini \
+    && echo "swoole.use_shortname=off" >> php.ini \
     && cp php-fpm.conf.default php-fpm.conf \
     && echo "error_log = \/export\/logs\/php\/php-fpm_error.log" >> php-fpm.conf \
     && echo "daemonize = yes" >> php-fpm.conf \
@@ -82,6 +83,12 @@ RUN yum update -y && yum clean all \
 \
     #创建工作目录
     && mkdir -p /export/www/dtc_support_web /export/www/dtc_support_app \
+\
+    #快捷方式
+    && echo "export PHP_HOME=/usr/local/webserver/php" >> /etc/profile \
+    && echo "export NGINX_HOME=/usr/local/webserver/openresty/nginx" >> /etc/profile \
+    && echo "export PATH=$PHP_HOME/bin:$PHP_HOME/sbin:$NGING_HOME/bin:$PATH" >> /etc/profile \
+    && source /etc/profile \
 
 
 WORKDIR /export/www

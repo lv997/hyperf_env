@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+        es:
+                driver: bridge
+
+services:
+        elasticsearch:
+                image: elasticsearch:7.10.1
+                container_name: es7.10.1
+#                restart: always
+                environment:
+                        - discovery.type=single-node
+                ports:
+                        - ${ELASTICSEARCH_PORT-9200}:${ELASTICSEARCH_PORT-9200}
+                        - ${ELASTICSEARCH_TCP_PORT-9300}:${ELASTICSEARCH_TCP_PORT-9300}
+                tty: true
+                volumes:
+                        - /export/data/elasticsearch:/usr/share/elasticsearch/data
+                networks:
+                        - es
+#                network_mode: bridge

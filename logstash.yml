@@ -1,0 +1,19 @@
+version: '3'
+
+networks:
+        es:
+                driver: bridge
+
+services:
+        logstash:
+                image: logstash:7.10.1
+                container_name: logstash7.10.1
+                restart: always
+                volumes:
+                        - /export/data/logstash/pipeline:/usr/share/logstash/pipeline
+                        - /export/logs/logstash:/usr/share/logstash/logs
+                networks:
+                        - es
+                ports:
+                        - ${KIBANA_PORT-5044}:${KIBANA_PORT-5044}
+                        - ${KIBANA_PORT2-9600}:${KIBANA_PORT2-9600}

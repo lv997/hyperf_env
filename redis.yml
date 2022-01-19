@@ -1,0 +1,11 @@
+version: '3'
+services:
+        redis:
+                image: redis:6.2.5
+                container_name: redis6.2.5
+                restart: always
+                ports:
+                        - ${REDIS_PORT-6379}:${REDIS_PORT-6379}
+                tty: true
+                volumes:
+                        - /export/data/redis:/data
