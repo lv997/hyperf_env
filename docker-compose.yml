@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-        es:
-                driver: bridge
-
 services:
         hyperf_env:
                 image: natici/hyperf:v3
@@ -19,6 +15,10 @@ services:
                         - TZ=UTC
                         - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/webserver/php/bin:/usr/local/webserver/php/sbin:/usr/local/webserver/openresty/nginx/sbin/
                 tty: true
+                logging: 
+                        driver: "json-file"
+                        options:
+                                max-size: "256m"
                 command:
                         - sh
                         - -c
